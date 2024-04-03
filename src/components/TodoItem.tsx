@@ -1,33 +1,27 @@
 import React from 'react';
 import { Tooltip, Typography, List, Button, Popconfirm, Switch } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-
-interface ITodoItem {
-    id: number;
-    name: string;
-    completed: boolean;
-}
+import { Todo } from '../todos/domain';
 
 interface ITodoItemProps {
-    todo: ITodoItem;
-    onTodoToggle: (todo: ITodoItem) => void;
-    onTodoRemoval: (todo: ITodoItem) => void;
+    todo: Todo;
+    onTodoToggle: (todo: Todo) => void;
+    onTodoRemoval: (todo: Todo) => void;
+    onTodoUpdate: (todo: Todo) => void;
 }
 
 const { Text } = Typography;
 
-const TodoItem: React.FC<ITodoItemProps> = ({todo, onTodoRemoval, onTodoToggle}) => {
+const TodoItem: React.FC<ITodoItemProps> = ({todo, onTodoRemoval, onTodoToggle, onTodoUpdate}) => {
   return (
     <List.Item
         actions={[
-            <Tooltip title={todo.completed ? 'Tarea incompleta' : 'Tarea finalizada'} >
-                <Switch
-                    onChange={() => onTodoToggle(todo)}
-                    unCheckedChildren="completar"
-                    checkedChildren="pendiente"
-                    defaultChecked={todo.completed}
-                />
-            </Tooltip>,
+            <Switch
+                onChange={() => onTodoToggle(todo)}
+                unCheckedChildren="completar"
+                checkedChildren="pendiente"
+                defaultChecked={todo.completed}
+            />,
             <Popconfirm
                 title="Atención"
                 description="¿Estás seguro de editar esta tarea?"
@@ -35,7 +29,7 @@ const TodoItem: React.FC<ITodoItemProps> = ({todo, onTodoRemoval, onTodoToggle})
                 okText="Editar"
                 icon={<ExclamationCircleOutlined style={{ color: 'green' }} />}
                 onConfirm={() => {
-                    onTodoRemoval(todo);
+                    onTodoUpdate(todo);
                 }}
             >
                 <Tooltip title="Editar tarea">
@@ -60,7 +54,7 @@ const TodoItem: React.FC<ITodoItemProps> = ({todo, onTodoRemoval, onTodoToggle})
         key={todo.id}
     >
         <div>
-            <Text delete={todo.completed}>{todo.name}</Text>
+            <Text>{ todo.completed ? '👌' : '👋' } {todo.name}</Text>
         </div>
     </List.Item>
   )

@@ -1,10 +1,10 @@
-import Todo from "./pages/Todo";
+import TodoPages from "./pages/Todo";
 
 function App() {
 
   return (
     <>
-      <Todo />
+      <TodoPages />
     </>
   )
 }

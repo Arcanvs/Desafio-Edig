@@ -2,6 +2,7 @@ import * as express from "express"
 import { Request, Response } from "express"
 import { Todo } from "./entity/todo.entity"
 import { myDataSource } from "./app-data-source"
+import * as cors from "cors"
 
 // conexion a la base de datos
 myDataSource
@@ -15,6 +16,8 @@ myDataSource
 
 // config express
 const app = express();
+app.use(cors());
+
 app.use(express.json())
 
 // rutas de TODOS
