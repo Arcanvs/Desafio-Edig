@@ -10,9 +10,7 @@ const Todo: React.FC = () => {
             justify="center"
             gutter={[0, 24]}
         >
-            <Col span={20}>
-                Lista de tareas
-            </Col>
+            <Col span={20}></Col>
 
             <Col span={20} >
                 <Card title="Agregar una nueva tarea">
