@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card } from 'antd';
+import { Row, Col, Card, notification } from 'antd';
 import { TodoForm, TodoList } from '../components';
 import { Todo, TodoFormData } from '../todos/domain';
 import { createApiTodoRepository } from '../todos/infrastructure/ApiTodoRepository';
@@ -15,35 +15,30 @@ const TodoPage: React.FC = () => {
     
     const handleFormSubmit = async (todo: TodoFormData) => {
         const response = await createApiTodoRepository().create(todo);
-        console.log("RESPONSE ",response);
-        //message.success('Todo agregado!');
+        openNotification('Tarea agregada!',`La tarea : ${response.name} - se ha agregado correctamente`);
         fetchTodos();
     };
 
     const handleRemoveTodo = async (todo: Todo) => {
-        const response = await createApiTodoRepository().remove(todo.id);
-        console.log("RESPONSE ",response);
+        await createApiTodoRepository().remove(todo.id);
+        openNotification('Tarea eliminada!',`La tarea : ${todo.name} - se ha eliminado correctamente`);
         fetchTodos();
-        //message.warn('Todo eliminado!');
     };
 
     const handleToggleTodoStatus = async (todo: Todo) => {
         todo.completed = !todo.completed;
         const response = await createApiTodoRepository().update(todo);
-        console.log("RESPONSE ",response);
+        openNotification('Tarea actualizada!',`La tarea : ${response.name} - esta ${response.completed ? 'completada' : 'pendiente'}`);
         fetchTodos();
-        //message.info('Todo actualizado!');
     };
 
     const handleToggleTodoUpdate = async (todo: Todo) => {
-        console.log("TOGGLE TODO UPDATE ",todo);
         setTodo(todo);
     };
 
     const handleFormSubmitUpdate = async (todo: Todo) => {
         const response = await createApiTodoRepository().update(todo);
-        console.log("RESPONSE EDIT",response);
-        //message.success('Todo editado!');
+        openNotification('Tarea editada!',`La tarea : ${response.name} - se ha editado correctamente`);
         setTodo(null)
         fetchTodos();
     };
@@ -55,6 +50,14 @@ const TodoPage: React.FC = () => {
     useEffect(() => {
         fetchTodos();
     }, []);
+
+    const openNotification = (message : string, description: string) => {
+        notification.open({
+            message: message,
+            description: description,
+            duration: 2
+        });
+    };
 
     return (
         <Row
